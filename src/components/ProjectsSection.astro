@@ -1,0 +1,147 @@
+---
+const projects = [
+  {
+    id: 1,
+    title: "Pokorinta",
+    subtitle: "自動打楽器 v1",
+    description:
+      "ESP32とソレノイドを使用した自動演奏カホン。MIDIシーケンスに合わせてリズムを刻む、メイカーサークルの原点となった作品。",
+    tags: ["ESP32", "Solenoid", "MIDI", "Cajon"],
+    youtubeId: "dQw4w9WgXcQ",
+  },
+  {
+    id: 2,
+    title: "Pokorinta 2",
+    subtitle: "自動打楽器 v2",
+    description:
+      "3Dプリンター製パーツとサーボモーターを組み合わせた進化版。より複雑なリズムパターンと動的な演奏が可能に。",
+    tags: ["ESP32", "Servo", "3D Print", "WiFi"],
+    youtubeId: "dQw4w9WgXcQ",
+  },
+]
+---
+
+<section id="projects" class="relative py-24">
+  <!-- Background decoration -->
+  <div class="absolute inset-0 bg-gradient-to-b from-background via-neon-blue/[0.02] to-background"></div>
+
+  <div class="relative mx-auto max-w-7xl px-4 md:px-6">
+    <!-- Section header -->
+    <div class="mb-16 text-center">
+      <div class="mb-4 flex items-center justify-center gap-3">
+        <div class="h-px w-8 bg-neon-blue"></div>
+        <span class="font-mono text-xs tracking-[0.2em] text-neon-blue">PROJECTS</span>
+        <div class="h-px w-8 bg-neon-blue"></div>
+      </div>
+      <h2 class="font-mono text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+        作品一覧
+      </h2>
+      <p class="mt-4 text-muted-foreground">開発した自動打楽器プロジェクト</p>
+    </div>
+
+    <!-- Projects grid -->
+    <div class="grid gap-6 sm:grid-cols-2">
+      {projects.map((project) => (
+        <div
+          class="group relative overflow-hidden rounded-lg border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-neon-blue/50 hover:bg-card"
+          data-youtube-id={project.youtubeId}
+        >
+          <!-- Glow effect on hover -->
+          <div class="pointer-events-none absolute -inset-px rounded-lg bg-gradient-to-r from-neon-blue/0 via-neon-blue/10 to-neon-orange/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+          <!-- Image/Video container -->
+          <div class="relative aspect-video overflow-hidden bg-cyber-dark">
+            <!-- Video placeholder (replaced by iframe on play) -->
+            <div class="video-placeholder absolute inset-0">
+              <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/10 via-transparent to-neon-orange/10"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="grid grid-cols-4 gap-2 opacity-20">
+                  {Array.from({ length: 16 }).map((_, i) => (
+                    <div class="h-4 w-4 rounded-sm bg-neon-blue/50"></div>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Play button overlay -->
+              <button
+                class="play-btn absolute inset-0 flex items-center justify-center bg-background/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                aria-label="動画を再生"
+              >
+                <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-neon-blue bg-background/80 transition-transform duration-300 hover:scale-110">
+                  <svg class="h-6 w-6 text-neon-blue" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              </button>
+
+              <!-- Project subtitle overlay -->
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent p-4">
+                <span class="font-mono text-xs text-neon-blue">{project.subtitle}</span>
+              </div>
+            </div>
+
+            <!-- YouTube iframe (hidden initially) -->
+            <div class="video-frame hidden absolute inset-0"></div>
+          </div>
+
+          <!-- Content -->
+          <div class="p-6">
+            <h3 class="mb-2 font-mono text-xl font-bold text-foreground">{project.title}</h3>
+            <p class="mb-4 text-sm leading-relaxed text-muted-foreground">{project.description}</p>
+
+            <!-- Tags -->
+            <div class="mb-4 flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <span class="rounded border border-border/50 bg-muted/50 px-2 py-0.5 font-mono text-xs text-muted-foreground">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-2">
+              <button
+                class="play-btn flex-1 rounded border border-neon-blue/50 bg-transparent px-3 py-1.5 font-mono text-xs text-neon-blue transition-colors hover:bg-neon-blue hover:text-background flex items-center justify-center gap-2"
+              >
+                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                デモを見る
+              </button>
+              <a
+                href={`https://youtube.com/watch?v=${project.youtubeId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="rounded border border-border/50 bg-transparent px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-neon-orange hover:text-neon-orange flex items-center justify-center"
+                aria-label="YouTubeで開く"
+              >
+                <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-youtube-id]").forEach((card) => {
+    const youtubeId = card.dataset.youtubeId!;
+    const placeholder = card.querySelector<HTMLElement>(".video-placeholder")!;
+    const frameContainer = card.querySelector<HTMLElement>(".video-frame")!;
+    const playBtns = card.querySelectorAll<HTMLButtonElement>(".play-btn");
+
+    const loadVideo = () => {
+      if (!frameContainer.classList.contains("hidden")) return;
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+      iframe.className = "absolute inset-0 h-full w-full";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      iframe.allowFullscreen = true;
+      frameContainer.appendChild(iframe);
+      placeholder.classList.add("hidden");
+      frameContainer.classList.remove("hidden");
+    };
+
+    playBtns.forEach((btn) => btn.addEventListener("click", loadVideo));
+  });
+</script>
