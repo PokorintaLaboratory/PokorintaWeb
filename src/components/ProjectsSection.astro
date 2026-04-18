@@ -6,8 +6,24 @@ const projects = [
     subtitle: "自動打楽器 v1",
     description:
       "M5Stamp S3とソレノイドを使用した自動演奏カホン。MIDIシーケンスに合わせてリズムを刻む、チームの原点となった作品。",
+    fullDescription:
+      "Pokorintaは、Pokorinta Laboratoryが最初に開発した自動打楽器です。M5Stamp S3マイコンを中心に、複数のソレノイドアクチュエータを制御することで、カホンを自動演奏します。MIDI入力に対応しており、DAWやシーケンサーからリアルタイムでリズムパターンを送信することが可能です。3Dプリンターで製作したマウントブラケットにより、様々なサイズのカホンに取り付けることができます。",
     tags: ["M5Stamp S3", "Solenoid", "MIDI", "Cajon"],
     youtubeId: "dQw4w9WgXcQ",
+    images: [
+      { id: 1, alt: "Pokorinta 全体像" },
+      { id: 2, alt: "M5Stamp S3制御基板" },
+      { id: 3, alt: "ソレノイドマウント" },
+      { id: 4, alt: "演奏デモ" },
+    ],
+    specs: {
+      microcontroller: "M5Stamp S3",
+      actuators: "プッシュソレノイド x4",
+      power: "12V 5A DC",
+      connectivity: "WiFi / Bluetooth / MIDI",
+      dimensions: "150 x 100 x 80 mm",
+    },
+    developmentYear: "2022",
   },
   {
     id: 2,
@@ -15,8 +31,24 @@ const projects = [
     subtitle: "自動打楽器 v2",
     description:
       "透明な筐体に31個のソレノイドを搭載し、ハイハット開閉機構を備えた進化版。ESP32による制御でより多彩なリズムパターンを実現。",
+    fullDescription:
+      "Pokorinta 2は、初代Pokorintaの後継機として開発された第2世代の自動打楽器です。透明な筐体に31個のソレノイドを搭載し、ハイハットの開閉機構も備えています。ESP32による制御でより多彩なリズムパターンを実現し、WiFi経由でのリモートコントロールにも対応。モジュラー設計により様々な拡張が可能です。",
     tags: ["ESP32", "Solenoid", "3D Print", "Hi-Hat"],
     youtubeId: "dQw4w9WgXcQ",
+    images: [
+      { id: 1, alt: "Pokorinta 2 全体像" },
+      { id: 2, alt: "31個のソレノイド" },
+      { id: 3, alt: "ハイハット機構" },
+      { id: 4, alt: "透明筐体" },
+    ],
+    specs: {
+      microcontroller: "ESP32-WROOM-32",
+      actuators: "ソレノイド x31 + ハイハット機構",
+      power: "12V 10A DC",
+      connectivity: "WiFi / Bluetooth / MIDI",
+      dimensions: "300 x 250 x 200 mm",
+    },
+    developmentYear: "2023",
   },
 ]
 ---
@@ -43,15 +75,17 @@ const projects = [
     <div class="grid gap-6 sm:grid-cols-2">
       {projects.map((project) => (
         <div
-          class="group relative overflow-hidden rounded-lg border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-neon-blue/50 hover:bg-card"
+          class="group relative cursor-pointer overflow-hidden rounded-lg border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-neon-blue/50 hover:bg-card"
+          data-project-id={project.id}
           data-youtube-id={project.youtubeId}
+          data-project-json={JSON.stringify(project)}
         >
           <!-- Glow effect on hover -->
           <div class="pointer-events-none absolute -inset-px rounded-lg bg-gradient-to-r from-neon-blue/0 via-neon-blue/10 to-neon-orange/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 
           <!-- Image/Video container -->
           <div class="relative aspect-video overflow-hidden bg-cyber-dark">
-            <!-- Video placeholder (replaced by iframe on play) -->
+            <!-- Video placeholder -->
             <div class="video-placeholder absolute inset-0">
               <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/10 via-transparent to-neon-orange/10"></div>
               <div class="absolute inset-0 flex items-center justify-center">
@@ -62,17 +96,12 @@ const projects = [
                 </div>
               </div>
 
-              <!-- Play button overlay -->
-              <button
-                class="play-btn absolute inset-0 flex items-center justify-center bg-background/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                aria-label="動画を再生"
-              >
-                <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-neon-blue bg-background/80 transition-transform duration-300 hover:scale-110">
-                  <svg class="h-6 w-6 text-neon-blue" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                </div>
-              </button>
+              <!-- Click to view details overlay -->
+              <div class="detail-btn absolute inset-0 flex items-center justify-center bg-background/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <span class="rounded border border-neon-blue/50 bg-background/80 px-3 py-1.5 font-mono text-xs text-neon-blue">
+                  詳細を見る
+                </span>
+              </div>
 
               <!-- Project subtitle overlay -->
               <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent p-4">
@@ -85,17 +114,22 @@ const projects = [
           </div>
 
           <!-- Content -->
-          <div class="p-6">
+          <div class="card-content p-6">
             <h3 class="mb-2 font-mono text-xl font-bold text-foreground">{project.title}</h3>
-            <p class="mb-4 text-sm leading-relaxed text-muted-foreground">{project.description}</p>
+            <p class="mb-4 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{project.description}</p>
 
             <!-- Tags -->
             <div class="mb-4 flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
+              {project.tags.slice(0, 3).map((tag) => (
                 <span class="rounded border border-border/50 bg-muted/50 px-2 py-0.5 font-mono text-xs text-muted-foreground">
                   {tag}
                 </span>
               ))}
+              {project.tags.length > 3 && (
+                <span class="rounded border border-border/50 bg-muted/50 px-2 py-0.5 font-mono text-xs text-muted-foreground">
+                  +{project.tags.length - 3}
+                </span>
+              )}
             </div>
 
             <!-- Actions -->
@@ -121,16 +155,130 @@ const projects = [
       ))}
     </div>
   </div>
+
+  <!-- Project Detail Dialog -->
+  <div id="project-dialog" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div id="dialog-backdrop" class="absolute inset-0 bg-background/80 backdrop-blur-sm"></div>
+
+    <!-- Dialog content -->
+    <div class="relative flex h-full items-center justify-center p-4">
+      <div id="dialog-content" class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-lg border border-border/50 bg-card/95 p-6 backdrop-blur-md">
+        <!-- Close button -->
+        <button
+          id="dialog-close"
+          class="absolute right-4 top-4 z-10 rounded-full border border-border/50 bg-background/80 p-2 transition-colors hover:border-neon-blue hover:text-neon-blue"
+          aria-label="閉じる"
+        >
+          <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <!-- Left: Images/Video -->
+          <div>
+            <!-- Gallery / Video toggle area -->
+            <div id="dialog-media">
+              <!-- Image gallery -->
+              <div id="dialog-gallery" class="relative">
+                <div class="relative aspect-video overflow-hidden rounded-lg bg-cyber-dark">
+                  <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/20 via-transparent to-neon-orange/20"></div>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="grid grid-cols-6 gap-1 opacity-30">
+                      {Array.from({ length: 24 }).map((_, i) => (
+                        <div class="h-3 w-3 rounded-sm bg-neon-blue/50"></div>
+                      ))}
+                    </div>
+                  </div>
+                  <div id="dialog-image-label" class="absolute inset-0 flex items-center justify-center">
+                    <span class="font-mono text-sm text-muted-foreground"></span>
+                  </div>
+                  <div id="dialog-image-counter" class="absolute bottom-3 right-3 rounded bg-background/80 px-2 py-1 font-mono text-xs text-foreground"></div>
+                </div>
+                <!-- Navigation buttons -->
+                <button id="gallery-prev" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full border border-border/50 bg-background/80 p-2 transition-colors hover:border-neon-blue hover:text-neon-blue" aria-label="前の画像">
+                  <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <button id="gallery-next" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full border border-border/50 bg-background/80 p-2 transition-colors hover:border-neon-blue hover:text-neon-blue" aria-label="次の画像">
+                  <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+                <!-- Thumbnails -->
+                <div id="dialog-thumbnails" class="mt-3 flex gap-2"></div>
+              </div>
+
+              <!-- Video (hidden initially) -->
+              <div id="dialog-video" class="hidden">
+                <div class="relative aspect-video overflow-hidden rounded-lg">
+                  <div id="dialog-video-frame" class="absolute inset-0"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Toggle buttons -->
+            <div class="mt-4 flex gap-2">
+              <button id="btn-show-gallery" class="rounded border bg-neon-blue px-3 py-1.5 font-mono text-xs text-background transition-colors hover:bg-neon-blue/90">
+                画像ギャラリー
+              </button>
+              <button id="btn-show-video" class="rounded border border-border/50 px-3 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-neon-blue hover:text-neon-blue flex items-center gap-2">
+                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                動画を見る
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Details -->
+          <div class="flex flex-col">
+            <!-- Header -->
+            <div class="mb-4">
+              <span id="dialog-subtitle" class="font-mono text-xs text-neon-blue"></span>
+              <h2 id="dialog-title" class="mt-1 font-mono text-2xl font-bold text-foreground"></h2>
+              <span id="dialog-year" class="font-mono text-xs text-muted-foreground"></span>
+            </div>
+
+            <!-- Tags -->
+            <div id="dialog-tags" class="mb-4 flex flex-wrap gap-2"></div>
+
+            <!-- Description -->
+            <p id="dialog-description" class="mb-6 text-sm leading-relaxed text-muted-foreground"></p>
+
+            <!-- Specs -->
+            <div class="mb-6 rounded-lg border border-border/50 bg-muted/30 p-4">
+              <h3 class="mb-3 flex items-center gap-2 font-mono text-sm font-semibold text-foreground">
+                <svg class="h-4 w-4 text-neon-orange" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                仕様
+              </h3>
+              <div id="dialog-specs" class="space-y-2"></div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-auto flex gap-2">
+              <a
+                id="dialog-youtube-link"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex flex-1 items-center justify-center gap-2 rounded bg-neon-blue px-4 py-2 font-mono text-sm text-background transition-colors hover:bg-neon-blue/90"
+              >
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                YouTubeで見る
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
+  // --- Card video playback ---
   document.querySelectorAll<HTMLElement>("[data-youtube-id]").forEach((card) => {
     const youtubeId = card.dataset.youtubeId!;
     const placeholder = card.querySelector<HTMLElement>(".video-placeholder")!;
     const frameContainer = card.querySelector<HTMLElement>(".video-frame")!;
     const playBtns = card.querySelectorAll<HTMLButtonElement>(".play-btn");
 
-    const loadVideo = () => {
+    const loadVideo = (e: Event) => {
+      e.stopPropagation();
       if (!frameContainer.classList.contains("hidden")) return;
       const iframe = document.createElement("iframe");
       iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
@@ -143,5 +291,206 @@ const projects = [
     };
 
     playBtns.forEach((btn) => btn.addEventListener("click", loadVideo));
+  });
+
+  // --- Project detail dialog ---
+  const dialog = document.getElementById("project-dialog")!;
+  const dialogBackdrop = document.getElementById("dialog-backdrop")!;
+  const dialogClose = document.getElementById("dialog-close")!;
+  const dialogTitle = document.getElementById("dialog-title")!;
+  const dialogSubtitle = document.getElementById("dialog-subtitle")!;
+  const dialogYear = document.getElementById("dialog-year")!;
+  const dialogTags = document.getElementById("dialog-tags")!;
+  const dialogDescription = document.getElementById("dialog-description")!;
+  const dialogSpecs = document.getElementById("dialog-specs")!;
+  const dialogYoutubeLink = document.getElementById("dialog-youtube-link") as HTMLAnchorElement;
+  const dialogImageLabel = document.querySelector("#dialog-image-label span")!;
+  const dialogImageCounter = document.getElementById("dialog-image-counter")!;
+  const dialogThumbnails = document.getElementById("dialog-thumbnails")!;
+  const galleryPrev = document.getElementById("gallery-prev")!;
+  const galleryNext = document.getElementById("gallery-next")!;
+  const dialogGallery = document.getElementById("dialog-gallery")!;
+  const dialogVideo = document.getElementById("dialog-video")!;
+  const dialogVideoFrame = document.getElementById("dialog-video-frame")!;
+  const btnShowGallery = document.getElementById("btn-show-gallery")!;
+  const btnShowVideo = document.getElementById("btn-show-video")!;
+
+  let currentImages: { id: number; alt: string }[] = [];
+  let currentImageIndex = 0;
+  let currentYoutubeId = "";
+
+  const specIcons: Record<string, string> = {
+    microcontroller: '<svg class="mt-0.5 h-4 w-4 text-neon-blue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>',
+    actuators: '<svg class="mt-0.5 h-4 w-4 text-neon-blue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
+    power: '<svg class="mt-0.5 h-4 w-4 text-neon-orange" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+    connectivity: '<div class="mt-0.5 h-4 w-4 rounded-full border border-neon-blue bg-neon-blue/20"></div>',
+    dimensions: '<div class="mt-0.5 h-4 w-4 rounded border border-neon-orange bg-neon-orange/20"></div>',
+  };
+
+  const specLabels: Record<string, string> = {
+    microcontroller: "マイコン",
+    actuators: "アクチュエータ",
+    power: "電源",
+    connectivity: "接続",
+    dimensions: "サイズ",
+  };
+
+  function updateGallery() {
+    if (currentImages.length === 0) return;
+    const img = currentImages[currentImageIndex];
+    dialogImageLabel.textContent = img.alt;
+    dialogImageCounter.textContent = `${currentImageIndex + 1} / ${currentImages.length}`;
+
+    // Update thumbnails
+    dialogThumbnails.querySelectorAll("button").forEach((btn, i) => {
+      if (i === currentImageIndex) {
+        btn.className = "relative aspect-video w-16 overflow-hidden rounded border border-neon-blue ring-1 ring-neon-blue transition-all";
+      } else {
+        btn.className = "relative aspect-video w-16 overflow-hidden rounded border border-border/50 opacity-60 hover:opacity-100 transition-all";
+      }
+    });
+
+    // Show/hide nav buttons
+    galleryPrev.classList.toggle("hidden", currentImages.length <= 1);
+    galleryNext.classList.toggle("hidden", currentImages.length <= 1);
+  }
+
+  function buildThumbnails() {
+    dialogThumbnails.innerHTML = "";
+    currentImages.forEach((image, index) => {
+      const btn = document.createElement("button");
+      btn.setAttribute("aria-label", `${image.alt}を表示`);
+      btn.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/10 to-neon-orange/10"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="grid grid-cols-2 gap-0.5 opacity-40">
+            <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
+            <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
+            <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
+            <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
+          </div>
+        </div>
+      `;
+      btn.addEventListener("click", () => {
+        currentImageIndex = index;
+        updateGallery();
+      });
+      dialogThumbnails.appendChild(btn);
+    });
+  }
+
+  function showGalleryMode() {
+    dialogGallery.classList.remove("hidden");
+    dialogVideo.classList.add("hidden");
+    dialogVideoFrame.innerHTML = "";
+    btnShowGallery.className = "rounded border bg-neon-blue px-3 py-1.5 font-mono text-xs text-background transition-colors hover:bg-neon-blue/90";
+    btnShowVideo.className = "rounded border border-border/50 px-3 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-neon-blue hover:text-neon-blue flex items-center gap-2";
+  }
+
+  function showVideoMode() {
+    dialogGallery.classList.add("hidden");
+    dialogVideo.classList.remove("hidden");
+    dialogVideoFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${currentYoutubeId}?autoplay=1" class="absolute inset-0 h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    btnShowVideo.className = "rounded border bg-neon-blue px-3 py-1.5 font-mono text-xs text-background transition-colors hover:bg-neon-blue/90 flex items-center gap-2";
+    btnShowGallery.className = "rounded border border-border/50 px-3 py-1.5 font-mono text-xs text-foreground transition-colors hover:border-neon-blue hover:text-neon-blue";
+  }
+
+  function openDialog(project: {
+    title: string;
+    subtitle: string;
+    fullDescription: string;
+    tags: string[];
+    youtubeId: string;
+    images: { id: number; alt: string }[];
+    specs: Record<string, string>;
+    developmentYear: string;
+  }) {
+    dialogTitle.textContent = project.title;
+    dialogSubtitle.textContent = project.subtitle;
+    dialogYear.textContent = `開発年: ${project.developmentYear}`;
+    dialogDescription.textContent = project.fullDescription;
+    dialogYoutubeLink.href = `https://youtube.com/watch?v=${project.youtubeId}`;
+
+    // Tags
+    dialogTags.innerHTML = "";
+    project.tags.forEach((tag) => {
+      const span = document.createElement("span");
+      span.className = "rounded border border-neon-blue/30 bg-neon-blue/10 px-2 py-0.5 font-mono text-xs text-neon-blue";
+      span.textContent = tag;
+      dialogTags.appendChild(span);
+    });
+
+    // Specs
+    dialogSpecs.innerHTML = "";
+    for (const [key, value] of Object.entries(project.specs)) {
+      const div = document.createElement("div");
+      div.className = "flex items-start gap-3";
+      div.innerHTML = `
+        ${specIcons[key] || ""}
+        <div>
+          <span class="font-mono text-xs text-muted-foreground">${specLabels[key] || key}</span>
+          <p class="font-mono text-sm text-foreground">${value}</p>
+        </div>
+      `;
+      dialogSpecs.appendChild(div);
+    }
+
+    // Gallery
+    currentImages = project.images;
+    currentImageIndex = 0;
+    currentYoutubeId = project.youtubeId;
+    buildThumbnails();
+    updateGallery();
+    showGalleryMode();
+
+    // Show dialog
+    dialog.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeDialog() {
+    dialog.classList.add("hidden");
+    document.body.style.overflow = "";
+    dialogVideoFrame.innerHTML = "";
+  }
+
+  // Event listeners for gallery navigation
+  galleryPrev.addEventListener("click", () => {
+    currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+    updateGallery();
+  });
+
+  galleryNext.addEventListener("click", () => {
+    currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+    updateGallery();
+  });
+
+  // Toggle gallery/video
+  btnShowGallery.addEventListener("click", showGalleryMode);
+  btnShowVideo.addEventListener("click", showVideoMode);
+
+  // Close dialog
+  dialogClose.addEventListener("click", closeDialog);
+  dialogBackdrop.addEventListener("click", closeDialog);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !dialog.classList.contains("hidden")) {
+      closeDialog();
+    }
+  });
+
+  // Open dialog on card click
+  document.querySelectorAll<HTMLElement>("[data-project-json]").forEach((card) => {
+    // Click on image area or content area opens dialog
+    const detailBtn = card.querySelector<HTMLElement>(".detail-btn");
+    const cardContent = card.querySelector<HTMLElement>(".card-content");
+
+    const handleOpen = (e: Event) => {
+      e.preventDefault();
+      const project = JSON.parse(card.dataset.projectJson!);
+      openDialog(project);
+    };
+
+    if (detailBtn) detailBtn.addEventListener("click", handleOpen);
+    if (cardContent) cardContent.addEventListener("click", handleOpen);
   });
 </script>
