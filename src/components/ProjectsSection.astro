@@ -1,4 +1,5 @@
 ---
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const projects = [
   {
     id: 1,
@@ -9,13 +10,15 @@ const projects = [
     fullDescription:
       "Pokorinta（ポコリンタ）は、Pokorinta Laboratoryの第一号機の自動演奏カホンです。本機の開発・制作を完遂するためにチームメンバーが集まり現在の活動の原点となりました。\n\nカホン本体の内部に多彩な楽器を凝縮した「オールインワン」構造が最大の特徴です。緻密なリズムを刻くために8個のソレノイドアクチュエータを搭載。MIDIデータを読み込み、ドラムチャネルデータを各ソレノイドに割り振り楽器を打ち分けます。ソレノイド特有の物理的な遅延をソフトウェア側で補正することで、機械でありながら人間味のある、正確で心地よいグルーヴを実現しました。",
     tags: ["M5StampS3", "Solenoid", "MIDI", "Cajon"],
-    youtubeId: "dQw4w9WgXcQ",
+    youtubeId: "M3PQvyEZkvs",
     instruments: ["カホン", "タンバリン", "マラカス", "8インチシンバル", "10インチシンバル", "ハイハットタンバリン"],
-    images: [],
+    images: [
+      { id: 1, src: `${base}/images/pokorinta/pokorinta-01.jpg`, alt: "NT京都 春日神社での展示" },
+      { id: 2, src: `${base}/images/pokorinta/pokorinta-02.jpg`, alt: "外観・内部構造" },
+    ],
     specs: {
       microcontroller: "M5Stamp S3",
       actuators: "ソレノイド x8",
-      power: "DC 15V",
       dimensions: "W300mm×D305mm×H530mm",
     },
     developmentYear: "2025",
@@ -31,12 +34,14 @@ const projects = [
     tags: ["ESP32", "Raspberry Pi", "Solenoid", "MIDI", "Cajon"],
     youtubeId: "dQw4w9WgXcQ",
     instruments: ["カホン", "10インチシンバル", "8インチシンバル x2", "6インチシンバル", "ハイハットシンバル", "タンバリン", "マラカス"],
-    images: [],
+    images: [
+      { id: 1, src: `${base}/images/pokorinta2/pokorinta2-01.jpg`, alt: "NT京都 春日神社での展示" },
+      { id: 2, src: `${base}/images/pokorinta2/pokorinta2-02.jpg`, alt: "外観・内部構造" },
+    ],
     specs: {
       master: "Raspberry Pi 4",
       microcontroller: "ESP32-S3-WROOM",
       actuators: "ソレノイド x31",
-      power: "DC 15V",
       dimensions: "W300mm×D310mm×H530mm",
     },
     developmentYear: "2026",
@@ -76,16 +81,28 @@ const projects = [
 
           <!-- Image/Video container -->
           <div class="relative aspect-video overflow-hidden bg-cyber-dark">
+            <!-- Thumbnail image -->
+            {project.images && project.images.length > 0 && (
+              <img
+                src={project.images[0].src}
+                alt={project.images[0].alt}
+                class="absolute inset-0 h-full w-full object-cover"
+              />
+            )}
             <!-- Video placeholder -->
             <div class="video-placeholder absolute inset-0">
-              <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/10 via-transparent to-neon-orange/10"></div>
-              <div class="absolute inset-0 flex items-center justify-center">
-                <div class="grid grid-cols-4 gap-2 opacity-20">
-                  {Array.from({ length: 16 }).map((_, i) => (
-                    <div class="h-4 w-4 rounded-sm bg-neon-blue/50"></div>
-                  ))}
-                </div>
-              </div>
+              {!(project.images && project.images.length > 0) && (
+                <>
+                  <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/10 via-transparent to-neon-orange/10"></div>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="grid grid-cols-4 gap-2 opacity-20">
+                      {Array.from({ length: 16 }).map((_, i) => (
+                        <div class="h-4 w-4 rounded-sm bg-neon-blue/50"></div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
 
               <!-- Click to view details overlay -->
               <div class="detail-btn absolute inset-0 flex items-center justify-center bg-background/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -172,16 +189,23 @@ const projects = [
               <!-- Image gallery -->
               <div id="dialog-gallery" class="relative">
                 <div class="relative aspect-video overflow-hidden rounded-lg bg-cyber-dark">
-                  <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/20 via-transparent to-neon-orange/20"></div>
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <div class="grid grid-cols-6 gap-1 opacity-30">
-                      {Array.from({ length: 24 }).map((_, i) => (
-                        <div class="h-3 w-3 rounded-sm bg-neon-blue/50"></div>
-                      ))}
+                  <!-- Placeholder (shown when no real image) -->
+                  <div id="dialog-image-placeholder" class="absolute inset-0 bg-gradient-to-br from-neon-blue/20 via-transparent to-neon-orange/20">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <div class="grid grid-cols-6 gap-1 opacity-30">
+                        {Array.from({ length: 24 }).map((_, i) => (
+                          <div class="h-3 w-3 rounded-sm bg-neon-blue/50"></div>
+                        ))}
+                      </div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <span id="dialog-image-label-placeholder" class="font-mono text-sm text-muted-foreground"></span>
                     </div>
                   </div>
-                  <div id="dialog-image-label" class="absolute inset-0 flex items-center justify-center">
-                    <span class="font-mono text-sm text-muted-foreground"></span>
+                  <!-- Real image -->
+                  <img id="dialog-image-display" class="absolute inset-0 h-full w-full object-cover hidden" alt="" />
+                  <div id="dialog-image-label" class="absolute inset-0 hidden items-end justify-start p-3">
+                    <span class="rounded bg-background/70 px-2 py-1 font-mono text-xs text-foreground"></span>
                   </div>
                   <div id="dialog-image-counter" class="absolute bottom-3 right-3 rounded bg-background/80 px-2 py-1 font-mono text-xs text-foreground"></div>
                 </div>
@@ -304,7 +328,11 @@ const projects = [
   const dialogDescription = document.getElementById("dialog-description")!;
   const dialogSpecs = document.getElementById("dialog-specs")!;
   const dialogYoutubeLink = document.getElementById("dialog-youtube-link") as HTMLAnchorElement;
-  const dialogImageLabel = document.querySelector("#dialog-image-label span")!;
+  const dialogImageDisplay = document.getElementById("dialog-image-display") as HTMLImageElement;
+  const dialogImagePlaceholder = document.getElementById("dialog-image-placeholder")!;
+  const dialogImageLabelPlaceholder = document.getElementById("dialog-image-label-placeholder")!;
+  const dialogImageLabel = document.getElementById("dialog-image-label")!;
+  const dialogImageLabelSpan = dialogImageLabel.querySelector("span")!;
   const dialogImageCounter = document.getElementById("dialog-image-counter")!;
   const dialogThumbnails = document.getElementById("dialog-thumbnails")!;
   const galleryPrev = document.getElementById("gallery-prev")!;
@@ -340,8 +368,23 @@ const projects = [
   function updateGallery() {
     if (currentImages.length === 0) return;
     const img = currentImages[currentImageIndex];
-    dialogImageLabel.textContent = img.alt;
     dialogImageCounter.textContent = `${currentImageIndex + 1} / ${currentImages.length}`;
+
+    if (img.src) {
+      dialogImageDisplay.src = img.src;
+      dialogImageDisplay.alt = img.alt;
+      dialogImageDisplay.classList.remove("hidden");
+      dialogImagePlaceholder.classList.add("hidden");
+      dialogImageLabel.classList.remove("hidden");
+      dialogImageLabel.classList.add("flex");
+      dialogImageLabelSpan.textContent = img.alt;
+    } else {
+      dialogImageDisplay.classList.add("hidden");
+      dialogImagePlaceholder.classList.remove("hidden");
+      dialogImageLabel.classList.add("hidden");
+      dialogImageLabel.classList.remove("flex");
+      dialogImageLabelPlaceholder.textContent = img.alt;
+    }
 
     // Update thumbnails
     dialogThumbnails.querySelectorAll("button").forEach((btn, i) => {
@@ -362,17 +405,21 @@ const projects = [
     currentImages.forEach((image, index) => {
       const btn = document.createElement("button");
       btn.setAttribute("aria-label", `${image.alt}を表示`);
-      btn.innerHTML = `
-        <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/10 to-neon-orange/10"></div>
-        <div class="absolute inset-0 flex items-center justify-center">
-          <div class="grid grid-cols-2 gap-0.5 opacity-40">
-            <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
-            <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
-            <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
-            <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
+      if (image.src) {
+        btn.innerHTML = `<img src="${image.src}" alt="${image.alt}" class="absolute inset-0 h-full w-full object-cover" />`;
+      } else {
+        btn.innerHTML = `
+          <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/10 to-neon-orange/10"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="grid grid-cols-2 gap-0.5 opacity-40">
+              <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
+              <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
+              <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
+              <div class="h-1.5 w-1.5 rounded-sm bg-neon-blue/50"></div>
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      }
       btn.addEventListener("click", () => {
         currentImageIndex = index;
         updateGallery();
@@ -403,7 +450,7 @@ const projects = [
     fullDescription: string;
     tags: string[];
     youtubeId: string;
-    images?: { id: number; alt: string }[];
+    images?: { id: number; src: string; alt: string }[];
     instruments?: string[];
     specs: Record<string, string>;
     developmentYear: string;
