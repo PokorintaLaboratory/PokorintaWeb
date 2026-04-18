@@ -2,28 +2,23 @@
 const projects = [
   {
     id: 1,
-    title: "Pokorinta",
-    subtitle: "自動打楽器 v1",
+    title: 'All-in Cajon "Pokorinta"',
+    subtitle: "自動演奏カホン",
     description:
-      "M5Stamp S3とソレノイドを使用した自動演奏カホン。MIDIシーケンスに合わせてリズムを刻む、チームの原点となった作品。",
+      "Pokorinta Laboratoryの第一号機の自動演奏カホン。8個のソレノイドでMIDIデータを解釈し、カホン内部の多彩な楽器を打ち分ける「オールインワン」構造が特徴。",
     fullDescription:
-      "Pokorintaは、Pokorinta Laboratoryが最初に開発した自動打楽器です。M5Stamp S3マイコンを中心に、複数のソレノイドアクチュエータを制御することで、カホンを自動演奏します。MIDI入力に対応しており、DAWやシーケンサーからリアルタイムでリズムパターンを送信することが可能です。3Dプリンターで製作したマウントブラケットにより、様々なサイズのカホンに取り付けることができます。",
-    tags: ["M5Stamp S3", "Solenoid", "MIDI", "Cajon"],
+      "Pokorinta（ポコリンタ）は、Pokorinta Laboratoryの第一号機の自動演奏カホンです。本機の開発・制作を完遂するためにチームメンバーが集まり現在の活動の原点となりました。\n\nカホン本体の内部に多彩な楽器を凝縮した「オールインワン」構造が最大の特徴です。緻密なリズムを刻くために8個のソレノイドアクチュエータを搭載。MIDIデータを読み込み、ドラムチャネルデータを各ソレノイドに割り振り楽器を打ち分けます。ソレノイド特有の物理的な遅延をソフトウェア側で補正することで、機械でありながら人間味のある、正確で心地よいグルーヴを実現しました。",
+    tags: ["M5StampS3", "Solenoid", "MIDI", "Cajon"],
     youtubeId: "dQw4w9WgXcQ",
-    images: [
-      { id: 1, alt: "Pokorinta 全体像" },
-      { id: 2, alt: "M5Stamp S3制御基板" },
-      { id: 3, alt: "ソレノイドマウント" },
-      { id: 4, alt: "演奏デモ" },
-    ],
+    instruments: ["カホン", "タンバリン", "マラカス", "8インチシンバル", "10インチシンバル", "ハイハットタンバリン"],
+    images: [],
     specs: {
       microcontroller: "M5Stamp S3",
-      actuators: "プッシュソレノイド x4",
-      power: "12V 5A DC",
-      connectivity: "WiFi / Bluetooth / MIDI",
-      dimensions: "150 x 100 x 80 mm",
+      actuators: "ソレノイド x8",
+      power: "DC 15V",
+      dimensions: "W300mm×D305mm×H530mm",
     },
-    developmentYear: "2022",
+    developmentYear: "2025",
   },
   {
     id: 2,
@@ -238,7 +233,16 @@ const projects = [
             <div id="dialog-tags" class="mb-4 flex flex-wrap gap-2"></div>
 
             <!-- Description -->
-            <p id="dialog-description" class="mb-6 text-sm leading-relaxed text-muted-foreground"></p>
+            <div id="dialog-description" class="mb-4 space-y-3 text-sm leading-relaxed text-muted-foreground"></div>
+
+            <!-- Instruments -->
+            <div id="dialog-instruments-block" class="mb-4 hidden rounded-lg border border-border/50 bg-muted/30 p-4">
+              <h3 class="mb-3 flex items-center gap-2 font-mono text-sm font-semibold text-foreground">
+                <svg class="h-4 w-4 text-neon-blue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                楽器一覧
+              </h3>
+              <div id="dialog-instruments" class="flex flex-wrap gap-2"></div>
+            </div>
 
             <!-- Specs -->
             <div class="mb-6 rounded-lg border border-border/50 bg-muted/30 p-4">
@@ -401,14 +405,18 @@ const projects = [
     fullDescription: string;
     tags: string[];
     youtubeId: string;
-    images: { id: number; alt: string }[];
+    images?: { id: number; alt: string }[];
+    instruments?: string[];
     specs: Record<string, string>;
     developmentYear: string;
   }) {
     dialogTitle.textContent = project.title;
     dialogSubtitle.textContent = project.subtitle;
     dialogYear.textContent = `開発年: ${project.developmentYear}`;
-    dialogDescription.textContent = project.fullDescription;
+    dialogDescription.innerHTML = project.fullDescription
+      .split(/\n\n+/)
+      .map((p: string) => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+      .join("");
     dialogYoutubeLink.href = `https://youtube.com/watch?v=${project.youtubeId}`;
 
     // Tags
@@ -435,8 +443,24 @@ const projects = [
       dialogSpecs.appendChild(div);
     }
 
+    // Instruments
+    const instrumentsBlock = document.getElementById("dialog-instruments-block")!;
+    const instrumentsContainer = document.getElementById("dialog-instruments")!;
+    if (project.instruments && project.instruments.length > 0) {
+      instrumentsContainer.innerHTML = "";
+      project.instruments.forEach((name: string) => {
+        const span = document.createElement("span");
+        span.className = "rounded border border-neon-blue/30 bg-neon-blue/10 px-2 py-0.5 font-mono text-xs text-neon-blue";
+        span.textContent = name;
+        instrumentsContainer.appendChild(span);
+      });
+      instrumentsBlock.classList.remove("hidden");
+    } else {
+      instrumentsBlock.classList.add("hidden");
+    }
+
     // Gallery
-    currentImages = project.images;
+    currentImages = project.images || [];
     currentImageIndex = 0;
     currentYoutubeId = project.youtubeId;
     buildThumbnails();
