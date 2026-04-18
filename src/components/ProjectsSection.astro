@@ -22,28 +22,24 @@ const projects = [
   },
   {
     id: 2,
-    title: "Pokorinta 2",
-    subtitle: "自動打楽器 v2",
+    title: 'All-in Cajon "Pokorinta 2"',
+    subtitle: "自動演奏カホン",
     description:
-      "透明な筐体に31個のソレノイドを搭載し、ハイハット開閉機構を備えた進化版。ESP32による制御でより多彩なリズムパターンを実現。",
+      "透明アクリル3面筐体にソレノイド31個とLEDを搭載した第2号機。ハイハット開閉機構を備え、視覚と聴覚の両面で楽しめる自動演奏カホン。",
     fullDescription:
-      "Pokorinta 2は、初代Pokorintaの後継機として開発された第2世代の自動打楽器です。透明な筐体に31個のソレノイドを搭載し、ハイハットの開閉機構も備えています。ESP32による制御でより多彩なリズムパターンを実現し、WiFi経由でのリモートコントロールにも対応。モジュラー設計により様々な拡張が可能です。",
-    tags: ["ESP32", "Solenoid", "3D Print", "Hi-Hat"],
+      'All-in Cajon "Pokorinta" シリーズの第2号機です。\n\n今回は「見ても楽しめる楽器」を目指し、筐体の3面に透明アクリルを採用することで、内部構造をよく観察することができます。\nまた、それぞれの打撃ソレノイド等にLEDを配置し、色鮮やかにその演奏を彩ります。\n演奏時に内部の複雑なメカニズムが躍動する様子を、視覚的にもダイレクトに体感できる設計となっています。\n\n機能面では、ソレノイドアクチュエータの数を31個へと大幅に増強。更に多様な音色を奏でます。\nまた、ハイハットシンバルの音をより忠実に再現するため、ソレノイドで開閉する機構を搭載。\nこれによって、前作以上に複雑で繊細な表現を可能にしました。',
+    tags: ["ESP32", "Raspberry Pi", "Solenoid", "MIDI", "Cajon"],
     youtubeId: "dQw4w9WgXcQ",
-    images: [
-      { id: 1, alt: "Pokorinta 2 全体像" },
-      { id: 2, alt: "31個のソレノイド" },
-      { id: 3, alt: "ハイハット機構" },
-      { id: 4, alt: "透明筐体" },
-    ],
+    instruments: ["カホン", "10インチシンバル", "8インチシンバル x2", "6インチシンバル", "ハイハットシンバル", "タンバリン", "マラカス"],
+    images: [],
     specs: {
-      microcontroller: "ESP32-WROOM-32",
-      actuators: "ソレノイド x31 + ハイハット機構",
-      power: "12V 10A DC",
-      connectivity: "WiFi / Bluetooth / MIDI",
-      dimensions: "300 x 250 x 200 mm",
+      master: "Raspberry Pi 4",
+      microcontroller: "ESP32-S3-WROOM",
+      actuators: "ソレノイド x31",
+      power: "DC 15V",
+      dimensions: "W300mm×D310mm×H530mm",
     },
-    developmentYear: "2023",
+    developmentYear: "2026",
   },
 ]
 ---
@@ -324,6 +320,7 @@ const projects = [
   let currentYoutubeId = "";
 
   const specIcons: Record<string, string> = {
+    master: '<svg class="mt-0.5 h-4 w-4 text-neon-orange" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
     microcontroller: '<svg class="mt-0.5 h-4 w-4 text-neon-blue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>',
     actuators: '<svg class="mt-0.5 h-4 w-4 text-neon-blue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
     power: '<svg class="mt-0.5 h-4 w-4 text-neon-orange" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
@@ -332,6 +329,7 @@ const projects = [
   };
 
   const specLabels: Record<string, string> = {
+    master: "マスタコントローラ",
     microcontroller: "マイコン",
     actuators: "アクチュエータ",
     power: "電源",
