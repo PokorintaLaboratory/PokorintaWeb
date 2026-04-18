@@ -86,7 +86,7 @@ const projects = [
               <img
                 src={project.images[0].src}
                 alt={project.images[0].alt}
-                class="absolute inset-0 h-full w-full object-cover"
+                class="absolute inset-0 h-full w-full object-contain"
               />
             )}
             <!-- Video placeholder -->
@@ -203,7 +203,7 @@ const projects = [
                     </div>
                   </div>
                   <!-- Real image -->
-                  <img id="dialog-image-display" class="absolute inset-0 h-full w-full object-cover hidden" alt="" />
+                  <img id="dialog-image-display" class="absolute inset-0 h-full w-full object-contain hidden" alt="" />
                   <div id="dialog-image-label" class="absolute inset-0 hidden items-end justify-start p-3">
                     <span class="rounded bg-background/70 px-2 py-1 font-mono text-xs text-foreground"></span>
                   </div>
@@ -406,7 +406,7 @@ const projects = [
       const btn = document.createElement("button");
       btn.setAttribute("aria-label", `${image.alt}を表示`);
       if (image.src) {
-        btn.innerHTML = `<img src="${image.src}" alt="${image.alt}" class="absolute inset-0 h-full w-full object-cover" />`;
+        btn.innerHTML = `<img src="${image.src}" alt="${image.alt}" class="absolute inset-0 h-full w-full object-contain" />`;
       } else {
         btn.innerHTML = `
           <div class="absolute inset-0 bg-gradient-to-br from-neon-blue/10 to-neon-orange/10"></div>
