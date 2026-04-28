@@ -1,43 +1,62 @@
-# Astro Starter Kit: Minimal
+# pokorinta-web
+
+Pokorinta Laboratory の公式サイトを構成する Astro ベースのフロントエンドです。
+
+## 概要
+
+- 作品情報、展示会情報、外部リンクをまとめた 1 ページ構成の静的サイト
+- GitHub Pages 公開を前提に、Astro の `base` 設定 `/PokorintaWeb` を使用
+
+## 使用技術
+
+- Astro
+- Tailwind CSS
+- TypeScript
+
+## セットアップ
+
+Node.js 22.12.0 以上を使用してください。
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 開発方法
 
-## 🚀 Project Structure
+ローカル開発サーバーを起動します。
 
-Inside of your Astro project, you'll see the following folders and files:
+```sh
+npm run dev
+```
+
+起動後、通常は `http://localhost:4321` で確認できます。
+
+## プレビュー方法
+
+本番用ビルドを作成して、ローカルでプレビューします。
+
+```sh
+npm run build
+npm run preview
+```
+
+ビルド成果物は `dist/` に出力されます。
+
+## ディレクトリ概要
 
 ```text
-/
-├── public/
+pokorinta-web/
+├── public/                画像やアイコンなどの静的ファイル
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/        各セクションの Astro コンポーネント
+│   ├── pages/             ルーティング対象のページ
+│   └── styles/            グローバルスタイル
+├── astro.config.mjs       Astro 設定
+├── package.json           スクリプトと依存関係
+└── README.md
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 補足
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- 画像などの静的ファイルは `public/` 配下に配置します。
+- GitHub Pages 向けに `base` が設定されているため、ルート相対パスを扱うときは公開先パスを意識してください。
