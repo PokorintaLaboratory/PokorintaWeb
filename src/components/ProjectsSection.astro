@@ -32,7 +32,7 @@ const projects = [
     fullDescription:
       'All-in Cajon "Pokorinta" シリーズの第2号機です。\n\n今回は「見ても楽しめる楽器」を目指し、筐体の3面に透明アクリルを採用することで、内部構造をよく観察することができます。\nまた、それぞれの打撃ソレノイド等にLEDを配置し、色鮮やかにその演奏を彩ります。\n演奏時に内部の複雑なメカニズムが躍動する様子を、視覚的にもダイレクトに体感できる設計となっています。\n\n機能面では、ソレノイドアクチュエータの数を31個へと大幅に増強。更に多様な音色を奏でます。\nまた、ハイハットシンバルの音をより忠実に再現するため、ソレノイドで開閉する機構を搭載。\nこれによって、前作以上に複雑で繊細な表現を可能にしました。',
     tags: ["ESP32", "Raspberry Pi", "Solenoid", "MIDI", "Cajon"],
-    youtubeId: "dQw4w9WgXcQ",
+    youtubeId: "",
     instruments: ["カホン", "10インチシンバル", "8インチシンバル x2", "6インチシンバル", "ハイハットシンバル", "タンバリン", "マラカス"],
     images: [
       { id: 1, src: `${base}/images/pokorinta2/pokorinta2-01.jpg`, alt: "NT京都 春日神社での展示" },
@@ -73,7 +73,7 @@ const projects = [
         <div
           class="group relative cursor-pointer overflow-hidden rounded-lg border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-neon-blue/50 hover:bg-card"
           data-project-id={project.id}
-          data-youtube-id={project.youtubeId}
+          data-youtube-id={project.youtubeId || undefined}
           data-project-json={JSON.stringify(project)}
         >
           <!-- Glow effect on hover -->
@@ -142,21 +142,29 @@ const projects = [
 
             <!-- Actions -->
             <div class="flex gap-2">
-              <button
-                class="play-btn flex-1 rounded border border-neon-blue/50 bg-transparent px-3 py-1.5 font-mono text-xs text-neon-blue transition-colors hover:bg-neon-blue hover:text-background flex items-center justify-center gap-2"
-              >
-                <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                デモを見る
-              </button>
-              <a
-                href={`https://youtube.com/watch?v=${project.youtubeId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="rounded border border-border/50 bg-transparent px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-neon-orange hover:text-neon-orange flex items-center justify-center"
-                aria-label="YouTubeで開く"
-              >
-                <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
+              {project.youtubeId ? (
+                <>
+                  <button
+                    class="play-btn flex-1 rounded border border-neon-blue/50 bg-transparent px-3 py-1.5 font-mono text-xs text-neon-blue transition-colors hover:bg-neon-blue hover:text-background flex items-center justify-center gap-2"
+                  >
+                    <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    デモを見る
+                  </button>
+                  <a
+                    href={`https://youtube.com/watch?v=${project.youtubeId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="rounded border border-border/50 bg-transparent px-3 py-1.5 font-mono text-xs text-muted-foreground transition-colors hover:border-neon-orange hover:text-neon-orange flex items-center justify-center"
+                    aria-label="YouTubeで開く"
+                  >
+                    <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  </a>
+                </>
+              ) : (
+                <span class="flex-1 rounded border border-border/50 bg-muted/30 px-3 py-1.5 text-center font-mono text-xs text-muted-foreground">
+                  動画準備中
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -342,6 +350,7 @@ const projects = [
   const dialogVideoFrame = document.getElementById("dialog-video-frame")!;
   const btnShowGallery = document.getElementById("btn-show-gallery")!;
   const btnShowVideo = document.getElementById("btn-show-video")!;
+  const dialogYoutubeActions = dialogYoutubeLink.parentElement!;
 
   let currentImages: { id: number; alt: string }[] = [];
   let currentImageIndex = 0;
@@ -437,6 +446,7 @@ const projects = [
   }
 
   function showVideoMode() {
+    if (!currentYoutubeId) return;
     dialogGallery.classList.add("hidden");
     dialogVideo.classList.remove("hidden");
     dialogVideoFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${currentYoutubeId}?autoplay=1" class="absolute inset-0 h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
@@ -462,7 +472,7 @@ const projects = [
       .split(/\n\n+/)
       .map((p: string) => `<p>${p.replace(/\n/g, '<br>')}</p>`)
       .join("");
-    dialogYoutubeLink.href = `https://youtube.com/watch?v=${project.youtubeId}`;
+    dialogYoutubeLink.href = project.youtubeId ? `https://youtube.com/watch?v=${project.youtubeId}` : "#";
 
     // Tags
     dialogTags.innerHTML = "";
@@ -511,6 +521,8 @@ const projects = [
     buildThumbnails();
     updateGallery();
     showGalleryMode();
+    btnShowVideo.classList.toggle("hidden", !currentYoutubeId);
+    dialogYoutubeActions.classList.toggle("hidden", !currentYoutubeId);
 
     // Show dialog
     dialog.classList.remove("hidden");
