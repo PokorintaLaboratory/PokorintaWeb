@@ -6,6 +6,7 @@ const events = [
     date: "2026.07.04",
     location: "浜松科学館",
     status: "upcoming",
+    badgeLabel: "予定",
     description: "浜松で開催されるMicro Maker Faireに出展予定",
     link: "#",
   },
@@ -15,7 +16,8 @@ const events = [
     date: "2026.06.28",
     location: "金沢駅東もてなしドーム地下広場",
     status: "upcoming",
-    description: "NT金沢2026に出展予定",
+    badgeLabel: "確定",
+    description: "NT金沢2026への出展が確定",
     link: "#",
   },
   {
@@ -82,7 +84,7 @@ const pastEvents = events.filter((event) => event.status === "past")
               <div class="absolute right-4 top-4">
                 <span class="flex items-center gap-1 rounded-full border border-neon-orange/50 bg-neon-orange/10 px-3 py-1 font-mono text-[11px] text-neon-orange">
                   <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-neon-orange"></span>
-                  予定
+                  {event.badgeLabel ?? "予定"}
                 </span>
               </div>
 
