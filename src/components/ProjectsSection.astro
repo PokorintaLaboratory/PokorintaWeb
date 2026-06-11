@@ -7,9 +7,9 @@ const projects = [
     title: 'All-in Cajon "Pokorinta"',
     subtitle: "自動演奏カホン",
     description:
-      "Pokorinta Laboratoryの第一号機の自動演奏カホン。8個のソレノイドでカホンとその内部の多彩な楽器を打ち分ける「All-in One」構造が特徴。",
+      "Pokorinta Laboratoryの第一号機の自動演奏カホン。カホン内部に多彩な楽器を凝縮した「All-in One」構造と、人との共演を可能にするV2を展開。",
     fullDescription:
-      "Pokorinta（ポコリンタ）は、Pokorinta Laboratoryの第一号機の自動演奏カホンです。本機の開発・制作を完遂するためにチームメンバーが集まり現在の活動の原点となりました。\n\nカホン本体の内部に多彩な楽器を凝縮した「オールインワン」構造が最大の特徴です。緻密なリズムを刻くために8個のソレノイドアクチュエータを搭載。MIDIデータを読み込み、ドラムチャネルデータを各ソレノイドに割り振り楽器を打ち分けます。ソレノイド特有の物理的な遅延をソフトウェア側で補正することで、機械でありながら人間味のある、正確で心地よいグルーヴを実現しました。",
+      "Pokorinta（ポコリンタ）は、Pokorinta Laboratoryの第一号機の自動演奏カホンです。本機の開発・制作を完遂するためにチームメンバーが集まり、現在の活動の原点となりました。\n\nカホン本体の内部に多彩な楽器を凝縮した「オールインワン」構造が最大の特徴です。ソレノイド特有の物理的な遅延をソフトウェア側で補正することで、機械でありながら人間味のある、正確で心地よいグルーヴを実現しました。\n\n## V1\n初代 All-in Cajon として、NT京都2025で初披露。MIDIデータを読み込み、ドラムパートを自動で演奏する機能を搭載したバージョンです。\n\n## V2 - Copilot edition -\n打面にピエゾ素子を取り付けることで、人との共演が可能になりました。人が外からカホンを叩いた動きを検知し、その入力にあわせてソレノイドを駆動します。\n\n- パワーアシストモード：人が叩いた瞬間にソレノイドを駆動し、人の力以上の音を出力します。\n- コンダクターモード：人が指揮者のようにリズムを叩くことで、リズムパターンを奏でます。\n- ループモード：人が叩いたリズムを記録し、何度も繰り返して演奏します。",
     tags: ["M5StampS3", "Solenoid", "MIDI", "Cajon"],
     youtubeId: "M3PQvyEZkvs",
     instruments: ["カホン", "タンバリン", "マラカス", "8インチシンバル", "10インチシンバル", "ハイハットタンバリン"],
@@ -481,6 +481,13 @@ const projects = [
             <h3 class="pt-2 font-mono text-sm font-semibold tracking-[0.14em] text-neon-blue">${heading.slice(3)}</h3>
             ${body ? `<p>${body}</p>` : ""}
           `;
+        }
+        if (p.split("\n").every((line: string) => line.startsWith("- "))) {
+          const items = p
+            .split("\n")
+            .map((line: string) => `<li>${line.slice(2)}</li>`)
+            .join("");
+          return `<ul class="list-disc space-y-1 pl-5">${items}</ul>`;
         }
         return `<p>${p.replace(/\n/g, '<br>')}</p>`;
       })
