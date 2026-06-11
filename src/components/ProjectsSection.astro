@@ -30,9 +30,9 @@ const projects = [
     title: 'All-in Cajon "Pokorinta 2"',
     subtitle: "自動演奏カホン",
     description:
-      "透明アクリル3面筐体にソレノイド31個とLEDを搭載した第2号機。ハイハット開閉機構を備え、視覚と聴覚の両面で楽しめる自動演奏カホン。",
+      "透明アクリル3面筐体とLEDを備えた第2号機。V2では打面材とソレノイドを見直し、より力強い音を追求した自動演奏カホン。",
     fullDescription:
-      'All-in Cajon "Pokorinta" シリーズの第2号機です。\n\n今回は「見ても楽しめる楽器」を目指し、筐体の3面に透明アクリルを採用することで、内部構造をよく観察することができます。\nまた、それぞれの打撃ソレノイド等にLEDを配置し、色鮮やかにその演奏を彩ります。\n演奏時に内部の複雑なメカニズムが躍動する様子を、視覚的にもダイレクトに体感できる設計となっています。\n\n機能面では、ソレノイドアクチュエータの数を31個へと大幅に増強。更に多様な音色を奏でます。\nまた、ハイハットシンバルの音をより忠実に再現するため、ソレノイドで開閉する機構を搭載。\nこれによって、前作以上に複雑で繊細な表現を可能にしました。',
+      'All-in Cajon "Pokorinta" シリーズの第2号機です。\n\n今回は「見ても楽しめる楽器」を目指し、筐体の3面に透明アクリルを採用することで、内部構造をよく観察することができます。\nまた、それぞれの打撃ソレノイド等にLEDを配置し、色鮮やかにその演奏を彩ります。\n演奏時に内部の複雑なメカニズムが躍動する様子を、視覚的にもダイレクトに体感できる設計となっています。\n\n機能面では、多数のソレノイドアクチュエータを搭載し、前作以上に多彩な音色を奏でます。\nまた、ハイハットシンバルの音をより忠実に再現するため、ソレノイドで開閉する機構を搭載。\nこれによって、複雑で繊細な表現を可能にしました。\n\n## V1\nNT京都2026出展を目標に制作。とにかく多くのソレノイドを搭載し、多彩な音色を奏でることを目指したバージョンです。そのため、31個という大量のソレノイドを搭載しました。\n\n## V2\nカホン打面の音質向上を目的に、打面材をシナ合板からバーチ合板へ変更しました。さらに、打面を叩くソレノイドをより大型のものに置き換えることで、より力強い音を出せるよう改良しています。この見直しにあわせてソレノイドの構成も整理し、搭載数は31個から21個へと絞り込みました。',
     tags: ["ESP32", "Raspberry Pi", "Solenoid", "MIDI", "Cajon"],
     youtubeId: "",
     instruments: ["カホン", "10インチシンバル", "8インチシンバル x2", "6インチシンバル", "ハイハットシンバル", "タンバリン", "マラカス"],
@@ -43,7 +43,7 @@ const projects = [
     specs: {
       master: "Raspberry Pi 4",
       microcontroller: "ESP32-S3-WROOM",
-      actuators: "ソレノイド x31",
+      actuators: "ソレノイド V1: x31 / V2: x21",
       dimensions: "W300mm×D310mm×H530mm",
     },
     developmentYear: "2026",
@@ -473,7 +473,17 @@ const projects = [
     dialogYear.textContent = `開発年: ${project.developmentYear}`;
     dialogDescription.innerHTML = project.fullDescription
       .split(/\n\n+/)
-      .map((p: string) => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+      .map((p: string) => {
+        if (p.startsWith("## ")) {
+          const [heading, ...bodyLines] = p.split("\n");
+          const body = bodyLines.join("<br>");
+          return `
+            <h3 class="pt-2 font-mono text-sm font-semibold tracking-[0.14em] text-neon-blue">${heading.slice(3)}</h3>
+            ${body ? `<p>${body}</p>` : ""}
+          `;
+        }
+        return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+      })
       .join("");
     dialogYoutubeLink.href = project.youtubeId ? `https://youtube.com/watch?v=${project.youtubeId}` : "#";
 
