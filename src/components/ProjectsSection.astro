@@ -1,15 +1,35 @@
 ---
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const features = [
+  {
+    slug: "auto-play",
+    title: "自動演奏モード",
+    description:
+      "MIDIデータからドラムパターンを読み込み、内蔵ソレノイドでカホンや内臓楽器を自動演奏します。",
+    image: `${base}/images/features/auto-play.png`,
+    alt: "自動演奏モードの挿絵",
+  },
+  {
+    slug: "conductor",
+    title: "コンダクターモード",
+    description:
+      "人が刻むリズムを合図として受け取り、登録されたリズムパターンを指揮するように演奏します。",
+    image: `${base}/images/features/conductor.png`,
+    alt: "コンダクターモードの挿絵",
+  },
+];
+
 const projects = [
   {
     id: 1,
     slug: "pokorinta",
+    shortTitle: "Pokorinta",
     title: 'All-in Cajon "Pokorinta"',
     subtitle: "自動演奏カホン",
     description:
-      "Pokorinta Laboratoryの第一号機の自動演奏カホン。カホン内部に多彩な楽器を凝縮した「All-in One」構造と、人との共演を可能にするV2を展開。",
+      "Pokorinta Laboratoryの第一号機の自動演奏カホン。カホン内部に多彩な楽器を凝縮した「All-in One」構造と、コンダクターモードを強化したV3を展開。",
     fullDescription:
-      "Pokorinta（ポコリンタ）は、Pokorinta Laboratoryの第一号機の自動演奏カホンです。本機の開発・制作を完遂するためにチームメンバーが集まり、現在の活動の原点となりました。\n\nカホン本体の内部に多彩な楽器を凝縮した「オールインワン」構造が最大の特徴です。ソレノイド特有の物理的な遅延をソフトウェア側で補正することで、機械でありながら人間味のある、正確で心地よいグルーヴを実現しました。\n\n## V1\n初代 All-in Cajon として、NT京都2025で初披露。MIDIデータを読み込み、ドラムパートを自動で演奏する機能を搭載したバージョンです。\n\n## V2 - Copilot edition -\n打面にピエゾ素子を取り付けることで、人との共演が可能になりました。人が外からカホンを叩いた動きを検知し、その入力にあわせてソレノイドを駆動します。\n\n- パワーアシストモード：人が叩いた瞬間にソレノイドを駆動し、人の力以上の音を出力します。\n- コンダクターモード：人が指揮者のようにリズムを叩くことで、リズムパターンを奏でます。\n- ループモード：人が叩いたリズムを記録し、何度も繰り返して演奏します。",
+      "Pokorinta（ポコリンタ）は、Pokorinta Laboratoryの第一号機の自動演奏カホンです。本機の開発・制作を完遂するためにチームメンバーが集まり、現在の活動の原点となりました。\n\nカホン本体の内部に多彩な楽器を凝縮した「オールインワン」構造が最大の特徴です。ソレノイド特有の物理的な遅延をソフトウェア側で補正することで、機械でありながら人間味のある、正確で心地よいグルーヴを実現しました。\n\n## V1\n初代 All-in Cajon として、NT京都2025で初披露。MIDIデータを読み込み、ドラムパートを自動で演奏する機能を搭載したバージョンです。\n\n## V2 - Copilot edition -\n打面にピエゾ素子を取り付けることで、人との共演が可能になりました。人が外からカホンを叩いた動きを検知し、その入力にあわせてソレノイドを駆動します。\n\n- パワーアシストモード：人が叩いた瞬間にソレノイドを駆動し、人の力以上の音を出力します。\n- コンダクターモード：人が指揮者のようにリズムを叩くことで、リズムパターンを奏でます。\n- ループモード：人が叩いたリズムを記録し、何度も繰り返して演奏します。\n\n## V3\nコンダクターモードを強化したバージョンです。演奏制御を整理し、代わりにパワーアシストモードとループモードを削除しました。",
     tags: ["M5StampS3", "Solenoid", "MIDI", "Cajon"],
     youtubeId: "M3PQvyEZkvs",
     instruments: ["カホン", "タンバリン", "マラカス", "8インチシンバル", "10インチシンバル", "ハイハットタンバリン"],
@@ -22,11 +42,17 @@ const projects = [
       actuators: "ソレノイド x8",
       dimensions: "W300mm×D305mm×H530mm",
     },
+    versions: [
+      { label: "V1", featureSlugs: ["auto-play"] },
+      { label: "V2", featureSlugs: ["auto-play", "power-assist", "conductor", "loop"] },
+      { label: "V3", featureSlugs: ["auto-play", "conductor"] },
+    ],
     developmentYear: "2025",
   },
   {
     id: 2,
     slug: "pokorinta-2",
+    shortTitle: "Pokorinta 2",
     title: 'All-in Cajon "Pokorinta 2"',
     subtitle: "自動演奏カホン",
     description:
@@ -46,9 +72,54 @@ const projects = [
       actuators: "ソレノイド V1: x31 / V2: x21",
       dimensions: "W300mm×D310mm×H530mm",
     },
+    versions: [
+      { label: "V1", featureSlugs: ["auto-play"] },
+      { label: "V2", featureSlugs: ["auto-play"] },
+    ],
     developmentYear: "2026",
   },
-]
+  {
+    id: 3,
+    slug: "pokocube",
+    shortTitle: "PokoCube",
+    title: 'Desktop Drummer "PokoCube"',
+    subtitle: "デスクトップ・ドラマー",
+    description:
+      "机をステージに変える、コンパクトなデスクトップ・ドラマー。合計14個のソレノイドで机を叩き、内蔵スピーカの音とあわせて一台で演奏を完結します。",
+    fullDescription:
+      "PokoCube（ポコキューブ）は、『生の響きを、もっと身近に。』をテーマにしたコンパクトなデスクトップ・ドラマーです。\n\n机の上に置くだけで、身近なデスクを演奏のステージに変えます。合計14個のソレノイドが机を叩いて演奏し、置く場所や素材によって音の響きが変わるところも楽しめる作品です。\n\n内蔵スピーカによってパーカッション以外の音も加えられるため、一台でハーモニーまで完結できます。コンパクトな筐体は省スペースで設置でき、インテリアにもなじむデザインを目指しています。",
+    tags: ["Auto Play", "Solenoid", "Desktop Drummer", "Speaker", "Cube"],
+    youtubeId: "",
+    instruments: ["机", "内蔵パーカッション", "内蔵スピーカ"],
+    images: [
+      { id: 1, src: `${base}/images/pokocube/pokocube-main.jpg`, alt: "PokoCubeの外観" },
+      { id: 2, src: `${base}/images/pokocube/pokocube-poster.png`, alt: "PokoCubeのポスター" },
+    ],
+    specs: {
+      actuators: "ソレノイド x14",
+      formFactor: "224x224x200",
+    },
+    featureSlugs: ["auto-play"],
+    developmentYear: "2026",
+  },
+];
+
+const featuresBySlug = Object.fromEntries(features.map((feature) => [feature.slug, feature]));
+const getLatestVersion = (project) => project.versions?.at(-1);
+const getProjectFeatureSlugs = (project) => getLatestVersion(project)?.featureSlugs ?? project.featureSlugs ?? [];
+const getProjectFeatureLabel = (project) => getLatestVersion(project) ? `FEATURES / ${getLatestVersion(project).label}` : "FEATURES";
+const featuresWithVersions = features.map((feature) => ({
+  ...feature,
+  versions: projects.flatMap((project) =>
+    (project.versions ?? [{ label: "", featureSlugs: project.featureSlugs ?? [] }])
+      .filter((version) => version.featureSlugs.includes(feature.slug))
+      .map((version) => ({
+        projectSlug: project.slug,
+        projectTitle: project.shortTitle,
+        versionLabel: version.label,
+      })),
+  ),
+}));
 ---
 
 <section id="projects" class="relative py-24">
@@ -66,7 +137,7 @@ const projects = [
       <h2 class="font-mono text-3xl font-bold tracking-tight text-foreground md:text-4xl">
         作品一覧
       </h2>
-      <p class="mt-4 text-muted-foreground">これまでに開発したAll-in Cajon</p>
+      <p class="mt-4 text-muted-foreground">これまでに開発した自動演奏・デスクトップ演奏作品</p>
     </div>
 
     <!-- Projects grid -->
@@ -143,6 +214,26 @@ const projects = [
               )}
             </div>
 
+            <!-- Feature links -->
+            {getProjectFeatureSlugs(project).length > 0 && (
+              <div class="mb-4 rounded-lg border border-border/50 bg-muted/20 p-3">
+                <p class="mb-2 font-mono text-xs tracking-[0.14em] text-muted-foreground">
+                  {getProjectFeatureLabel(project)}
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  {getProjectFeatureSlugs(project).map((slug) => (
+                    <a
+                      href={`#feature-${slug}`}
+                      data-card-link
+                      class="rounded border border-neon-blue/30 bg-neon-blue/10 px-2 py-0.5 font-mono text-xs text-neon-blue transition-colors hover:border-neon-blue hover:bg-neon-blue hover:text-background"
+                    >
+                      {featuresBySlug[slug].title}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <!-- Actions -->
             <div class="flex gap-2">
               {project.youtubeId ? (
@@ -173,6 +264,54 @@ const projects = [
         </div>
       ))}
     </div>
+
+    <!-- Features section -->
+    <section id="features" class="scroll-mt-24 pt-24">
+      <div class="mb-16 text-center">
+        <div class="mb-4 flex items-center justify-center gap-3">
+          <div class="h-px w-8 bg-neon-orange"></div>
+          <span class="font-mono text-xs tracking-[0.2em] text-neon-orange">FEATURES</span>
+          <div class="h-px w-8 bg-neon-orange"></div>
+        </div>
+        <h2 class="font-mono text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+          機能一覧
+        </h2>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        {featuresWithVersions.map((feature) => (
+          <article
+            id={`feature-${feature.slug}`}
+            class="group scroll-mt-24 overflow-hidden rounded-lg border border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-neon-orange/50 hover:bg-card"
+          >
+            <div class="relative aspect-[4/3] overflow-hidden bg-cyber-dark">
+              <img
+                src={feature.image}
+                alt={feature.alt}
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
+            </div>
+            <div class="p-5">
+              <h3 class="mb-2 font-mono text-lg font-bold text-foreground">{feature.title}</h3>
+              <p class="mb-4 text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
+              <p class="mb-2 font-mono text-xs tracking-[0.14em] text-muted-foreground">SUPPORTED BY</p>
+              <div class="flex flex-wrap gap-2">
+                {feature.versions.map((version) => (
+                  <a
+                    href={`#project-${version.projectSlug}`}
+                    class="rounded border border-neon-orange/30 bg-neon-orange/10 px-2 py-0.5 font-mono text-xs text-neon-orange transition-colors hover:border-neon-orange hover:bg-neon-orange hover:text-background"
+                  >
+                    {version.versionLabel ? `${version.projectTitle} ${version.versionLabel}` : version.projectTitle}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
   </div>
 
   <!-- Project Detail Dialog -->
@@ -355,7 +494,7 @@ const projects = [
   const btnShowVideo = document.getElementById("btn-show-video")!;
   const dialogYoutubeActions = dialogYoutubeLink.parentElement!;
 
-  let currentImages: { id: number; alt: string }[] = [];
+  let currentImages: { id: number; src?: string; alt: string }[] = [];
   let currentImageIndex = 0;
   let currentYoutubeId = "";
 
@@ -366,6 +505,7 @@ const projects = [
     power: '<svg class="mt-0.5 h-4 w-4 text-neon-orange" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
     connectivity: '<div class="mt-0.5 h-4 w-4 rounded-full border border-neon-blue bg-neon-blue/20"></div>',
     dimensions: '<div class="mt-0.5 h-4 w-4 rounded border border-neon-orange bg-neon-orange/20"></div>',
+    formFactor: '<svg class="mt-0.5 h-4 w-4 text-neon-orange" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
   };
 
   const specLabels: Record<string, string> = {
@@ -375,7 +515,34 @@ const projects = [
     power: "電源",
     connectivity: "接続",
     dimensions: "サイズ",
+    formFactor: "形状",
   };
+
+  const featureLabels: Record<string, string> = {
+    "auto-play": "自動演奏モード",
+    "power-assist": "パワーアシストモード",
+    conductor: "コンダクターモード",
+    loop: "ループモード",
+  };
+
+  function buildVersionFeatureCard(version: { label: string; featureSlugs: string[] }) {
+    const featureLinks = version.featureSlugs
+      .map((slug) => {
+        const label = featureLabels[slug] || slug;
+        return `
+          <span class="rounded border border-neon-blue/30 bg-neon-blue/10 px-2 py-0.5 font-mono text-xs text-neon-blue">
+            ${label}
+          </span>
+        `;
+      })
+      .join("");
+
+    return `
+      <div class="mt-2 mb-3 flex flex-wrap gap-2 rounded-lg border border-border/50 bg-muted/20 px-3 py-2">
+        ${featureLinks}
+      </div>
+    `;
+  }
 
   function updateGallery() {
     if (currentImages.length === 0) return;
@@ -466,6 +633,8 @@ const projects = [
     images?: { id: number; src: string; alt: string }[];
     instruments?: string[];
     specs: Record<string, string>;
+    versions?: { label: string; featureSlugs: string[] }[];
+    featureSlugs?: string[];
     developmentYear: string;
   }) {
     dialogTitle.textContent = project.title;
@@ -477,8 +646,11 @@ const projects = [
         if (p.startsWith("## ")) {
           const [heading, ...bodyLines] = p.split("\n");
           const body = bodyLines.join("<br>");
+          const headingText = heading.slice(3);
+          const version = project.versions?.find((item) => headingText.startsWith(item.label));
           return `
-            <h3 class="pt-2 font-mono text-sm font-semibold tracking-[0.14em] text-neon-blue">${heading.slice(3)}</h3>
+            <h3 class="pt-2 font-mono text-sm font-semibold tracking-[0.14em] text-neon-blue">${headingText}</h3>
+            ${version ? buildVersionFeatureCard(version) : ""}
             ${body ? `<p>${body}</p>` : ""}
           `;
         }
@@ -593,5 +765,9 @@ const projects = [
 
     if (detailBtn) detailBtn.addEventListener("click", handleOpen);
     if (cardContent) cardContent.addEventListener("click", handleOpen);
+  });
+
+  document.querySelectorAll<HTMLAnchorElement>("[data-card-link]").forEach((link) => {
+    link.addEventListener("click", (e) => e.stopPropagation());
   });
 </script>

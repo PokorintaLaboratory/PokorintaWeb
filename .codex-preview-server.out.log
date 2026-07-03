@@ -1,0 +1,6 @@
+
+> pokorinta-web@0.0.1 preview
+> astro preview --host 127.0.0.1 --port 4322
+
+[42m[1m astro [22m[49m [32mv6.1.7[39m [2mready in[22m 23 [2mms[22m
+[2m┃[22m Local    [36mhttp://127.0.0.1:4322/PokorintaWeb[39m

@@ -1,0 +1,2 @@
+[31m[1m19:24:35[22m [ERROR] [router][39m Request URLs for [1mpublic/[22m assets must also include your base. "/PokorintaWeb/icon-light-32x32.png" expected, but received "/icon-light-32x32.png".
+[31m[1m19:24:35[22m [ERROR] [router][39m Request URLs for [1mpublic/[22m assets must also include your base. "/PokorintaWeb/icon.svg" expected, but received "/icon.svg".
